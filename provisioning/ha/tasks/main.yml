@@ -1,0 +1,18 @@
+---
+- name: Install haproxy.
+  yum: name=haproxy state=installed
+  become: true
+  when: ansible_os_family == 'RedHat'
+
+- name: Disable SELinux
+  selinux: state=disabled
+  become: true
+    
+- name: Ensure haproxy is started and enabled on boot.
+  service: name=haproxy state=started enabled=yes
+  become: true
+
+- name: Haproxy config file
+  template: src='../templates/haproxy.cfg.j2' dest='/etc/haproxy/haproxy.cfg' mode=0644 owner='root'
+  become: true
+  notify: restart haproxy

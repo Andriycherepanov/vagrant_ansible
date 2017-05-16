@@ -1,0 +1,46 @@
+---
+- hosts: all
+  gather_facts: True
+  
+- hosts: web
+  roles:
+      - epel-repo
+      - nrpe
+      - web
+ 
+- hosts: haproxy
+  roles:
+      - epel-repo
+      - nrpe
+      - ha
+
+- hosts: ecinga
+  roles:
+      - epel-repo
+      - icinga2
+      - icinga2-ui
+      - nrpe
+      - icinga2-ansible-add-hosts
+        configuration_logic: "object"
+        host_attributes: |
+          check_command = "http"
+          vars.sla = "24x7"
+          vars.operator = "on_call"
+        host_checks: |
+          object Service "load_average" {
+            host_name = "{{ hostvars[item]['ansible_fqdn'] }}"
+            check_command = "check_nrpe"
+            vars.remote_nrpe_command = "check_load"
+          }
+
+         object Service "disk" {
+           host_name = "{{ hostvars[item]['ansible_fqdn'] }}"
+           check_command = "check_nrpe"
+           vars.remote_nrpe_command = "check_disk"
+         }
+
+         object Service "http" {
+           host_name = "{{ hostvars[item]['ansible_fqdn'] }}"
+           check_command = "http"
+           vars.http_vhost = "{{ hostvars[item]['ansible_domain'] }}"
+         }

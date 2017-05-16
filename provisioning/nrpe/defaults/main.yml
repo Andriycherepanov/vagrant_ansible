@@ -1,0 +1,23 @@
+---
+nrpe_allowed_hosts: "127.0.0.1,192.168.10.0/24"
+
+nrpe_check_commands:
+  check_load:
+    check_load: "-w 15,10,5 -c 30,25,20"
+  check_disk:
+    check_disk: "-w 20% -c 10% -p /"
+
+nrpe_configuration: |
+  log_facility=daemon
+  server_port=5666
+  server_address={{ hostvars['ecinga1']['ansible_enp0s8']['ipv4']['address'] }}
+  dont_blame_nrpe=0
+  debug=0
+  command_timeout=60
+  connection_timeout=150
+nrpe_check_commands: |
+  command[check_load]=/usr/lib64/nagios/plugins/check_load -w 15,10,8 -c 30,25,15
+  command[check_ssh]=/usr/lib64/nagios/plugins/check_ssh -H {{ ansible_enp0s8.ipv4.address }} -p 22
+  command[check_procs]=/usr/lib64/nagios/plugins/check_procs -w 300 -c 500
+  command[check_disk]=/usr/lib64/nagios/plugins/check_disk -w 15% -c 10% -p / -p /home -p /tmp
+  command[check_disk]=/usr/lib64/nagios/plugins/check_mem_ng

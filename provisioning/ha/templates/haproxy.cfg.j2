@@ -1,0 +1,30 @@
+global
+   log /dev/log local0
+   log /dev/log local1 notice
+   chroot /var/lib/haproxy
+   stats timeout 30s
+   user haproxy
+   group haproxy
+   daemon
+
+defaults
+   log global
+   mode {{ haproxy_frontend_mode }}
+   option httplog
+   option dontlognull
+   timeout connect 5000
+   timeout client 50000
+   timeout server 50000
+
+frontend http_front
+   bind {{ haproxy_frontend_bind_address }}:{{ haproxy_frontend_port }}
+   stats uri /haproxy?stats
+   default_backend http_back
+
+backend http_back
+   balance {{ haproxy_backend_balance_method }}
+{% for host in groups['web'] %}
+   server {{ hostvars[host]['ansible_nodename'] }} {{ hostvars[host]['ansible_enp0s8']['ipv4']['address'] }}:{{ haproxy_backend_port }}
+{% endfor %}
+
+

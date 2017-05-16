@@ -1,0 +1,49 @@
+---
+- name: Disable SELinux
+  selinux: state=disabled
+  become: true
+  
+- name: Disable Firewalld
+  service: name=firewalld state=stopped enabled=no
+  become: true
+
+- name: Install Icinga Classic UI
+  yum: name={{ item }} state=latest
+  with_items:
+  - icinga2-classicui-config
+  - icinga-gui
+  - python-passlib
+  notify:
+   - restart icinga2
+   - restart httpd
+  become: true
+
+- name: New random password for admin
+  shell: 'openssl rand -base64 8'
+  register: icinga2_classic_ui_passwd
+  no_log: true
+  become: true
+
+- name: Creating file with pass
+  template: src='templates/file.j2' dest='/vagrant/password' mode=0644 owner='root'
+  become: true
+
+- name: Configure admin  password
+  htpasswd: name=icingaadmin state=present path="/etc/icinga/passwd" create=no password={{ icinga2_classic_ui_passwd.stdout_lines.0 }}
+  notify:
+   - restart httpd
+  become: true
+
+- name: Remove original welcome.conf
+  file: path='/etc/httpd/conf.d/welcome.conf' state='absent' owner='root' mode=0644
+  become: true
+  notify: restart httpd
+  
+- name: Start httpd 
+  service: name=httpd state=started enabled=yes
+  become: true
+  
+- name: Copy icinga vhost conf file.
+  copy: src='files/icinga.conf' dest='/etc/httpd/conf.d/icinga.conf' mode=0644
+  notify: restart httpd
+  become: true

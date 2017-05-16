@@ -1,0 +1,7 @@
+[web]
+web01	ansible_ssh_host=192.168.10.110	ansible_ssh_user=vagrant	ansible_ssh_pass=vagrant
+web02	ansible_ssh_host=192.168.10.111	ansible_ssh_user=vagrant	ansible_ssh_pass=vagrant
+[haproxy]
+ha1		ansible_ssh_host=192.168.10.112	ansible_ssh_user=vagrant	ansible_ssh_pass=vagrant
+[ecinga]
+ecinga1	ansible_ssh_host=192.168.10.113	ansible_ssh_user=vagrant	ansible_ssh_pass=vagrant

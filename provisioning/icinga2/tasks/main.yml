@@ -1,0 +1,36 @@
+---
+- name: Get Icinga2 Yum Key on RedHat OS family
+  rpm_key: key='https://packages.icinga.org/icinga.key' state=present
+  become: true
+
+- name: Get Icinga2 Yum Repo on RedHat OS family
+  get_url: url="https://packages.icinga.org/epel/ICINGA-release.repo" dest="/etc/yum.repos.d/ICINGA-release.repo"
+  become: true
+  
+- name: Install Icinga2
+  yum: name=icinga2 state=latest
+  become: true
+  
+- name: Install Nagios Plugins
+  yum: name=nagios-plugins-all state=latest
+  become: true
+  
+- name: Install mailx
+  yum: name=mailx state=latest
+  become: true
+  
+- name: Start Icinga2
+  service: name=icinga2 state=started enabled=yes
+  become: true
+  
+- name: Copy Main Config
+  template: src=icinga2.conf.j2 dest="/etc/icinga2/icinga2.conf" owner=root group=root mode=0644
+  notify:
+    - restart icinga2
+  become: true
+  
+- name: Copy Commands Config
+  template: src=icinga2_check_commands.j2 dest="/etc/icinga2/conf.d/check_commands.conf" owner=root group=root mode=0644
+  notify:
+    - restart icinga2
+  become: true

@@ -1,0 +1,5 @@
+---
+- name: Install epel-release.
+  yum: name=epel-release state=installed
+  become: true
+  when: ansible_os_family == 'RedHat'

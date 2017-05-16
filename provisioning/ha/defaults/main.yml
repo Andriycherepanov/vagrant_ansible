@@ -1,0 +1,9 @@
+---
+# Frontend settings.
+haproxy_frontend_port: 80
+haproxy_frontend_mode: 'http'
+haproxy_frontend_bind_address: '*'
+
+# Backend settings.
+haproxy_backend_balance_method: 'roundrobin'
+haproxy_backend_port: 80

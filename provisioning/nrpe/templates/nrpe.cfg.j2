@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+allowed_hosts={{ nrpe_allowed_hosts }}
+
+{{ nrpe_configuration }}
+
+nrpe_user=nrpe
+nrpe_group=nrpe
+
+{{ nrpe_check_commands }}
