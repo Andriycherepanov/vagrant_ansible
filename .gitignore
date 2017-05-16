@@ -1,0 +1,4 @@
+Thumbs.db
+.vagrant/*
+provisioning/playbook.retry
+password
