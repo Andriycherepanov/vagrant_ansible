@@ -27,8 +27,7 @@ and Icinga
 ```sh
 http://127.0.0.1:8080
 ```
-User for Icinga: icingaadmin
-Password will be generated in workind directory, file password
+All needed credential will be provided in file password which was created in vagrant directory.
 
 Best regards,
 Andriy
