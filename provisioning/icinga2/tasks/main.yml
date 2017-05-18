@@ -1,9 +1,9 @@
 ---
-- name: Get Icinga2 Yum Key on RedHat OS family
+- name: Get Icinga2 Yum Key
   rpm_key: key='https://packages.icinga.org/icinga.key' state=present
   become: true
 
-- name: Get Icinga2 Yum Repo on RedHat OS family
+- name: Get Icinga2 Yum Repo
   get_url: url="https://packages.icinga.org/epel/ICINGA-release.repo" dest="/etc/yum.repos.d/ICINGA-release.repo"
   become: true
   

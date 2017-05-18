@@ -1,0 +1,11 @@
+---
+- name: Remove default config for Localhost
+  file: path=/etc/icinga2/conf.d/hosts.conf state=absent
+  become: true
+  
+- name: Copy Host Definitions
+  template: src=hosts_template.j2 dest=/etc/icinga2/conf.d/{{ hostvars[item]['ansible_fqdn'] }}.conf owner=root group=root mode=0644 
+  with_items: "{{ groups['all'] }}"
+  notify:
+   - reload icinga2
+  become: true

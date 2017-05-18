@@ -3,8 +3,16 @@
   yum: name=nrpe state=latest
   become: true
   
+- name: Disable SELinux
+  selinux: state=disabled
+  become: true
+  
 - name: Install Nagios plugins
   yum: name=nagios-plugins-all  state=latest
+  become: true
+  
+- name: Install Nrpe Plugin
+  yum: name=nagios-plugins-nrpe state=latest
   become: true
   
 - name: Install Check_Mem_Ng

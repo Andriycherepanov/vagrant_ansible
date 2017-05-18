@@ -33,11 +33,6 @@
   notify:
    - restart httpd
   become: true
-
-- name: Remove original welcome.conf
-  file: path='/etc/httpd/conf.d/welcome.conf' state='absent' owner='root' mode=0644
-  become: true
-  notify: restart httpd
   
 - name: Start httpd 
   service: name=httpd state=started enabled=yes

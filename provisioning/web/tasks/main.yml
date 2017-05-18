@@ -12,11 +12,6 @@
   copy: src='../files/vhosts.conf' dest='/etc/httpd/conf.d/site.conf' mode=0644
   notify: restart httpd
   become: true
-    
-- name: Remove original welcome.conf
-  file: path='/etc/httpd/conf.d/welcome.conf' state='absent' owner='root' mode=0644
-  become: true
-  notify: restart httpd
       
 - name: Creating dir for new site
   file: path='/usr/share/httpd/site' state='directory' mode=0755
