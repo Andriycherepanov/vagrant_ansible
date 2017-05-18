@@ -25,7 +25,7 @@ http://127.0.0.1:8082
 ```
 and Icinga:
 ```sh
-http://127.0.0.1:8080
+http://127.0.0.1:8080/icinga
 ```
 All needed credential will be provided in file password which was created in vagrant directory.
 
